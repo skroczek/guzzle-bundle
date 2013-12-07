@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GuzzleParamConverterTest extends TestCase
 {
+
     /**
      * @var GuzzleParamConverter
      */
@@ -41,14 +42,12 @@ class GuzzleParamConverterTest extends TestCase
         $this->assertTrue($this->converter->supports($config));
 
         $config = $this->createConfiguration(
-            'Misd\GuzzleBundle\Tests\Fixtures\Person',
-            array('client' => 'with.description')
+                'Misd\GuzzleBundle\Tests\Fixtures\Person', array('client' => 'with.description')
         );
         $this->assertTrue($this->converter->supports($config));
 
         $config = $this->createConfiguration(
-            'Misd\GuzzleBundle\Tests\Fixtures\Person',
-            array('client' => 'with.description', 'command' => 'GetPersonClass')
+                'Misd\GuzzleBundle\Tests\Fixtures\Person', array('client' => 'with.description', 'command' => 'GetPersonClass')
         );
         $this->assertTrue($this->converter->supports($config));
     }
@@ -59,8 +58,7 @@ class GuzzleParamConverterTest extends TestCase
     public function testUnknownClient()
     {
         $config = $this->createConfiguration(
-            'Misd\GuzzleBundle\Tests\Fixtures\Person',
-            array('client' => 'unknown.client')
+                'Misd\GuzzleBundle\Tests\Fixtures\Person', array('client' => 'unknown.client')
         );
         $this->converter->supports($config);
     }
@@ -71,8 +69,7 @@ class GuzzleParamConverterTest extends TestCase
     public function testCommandWithoutClient()
     {
         $config = $this->createConfiguration(
-            'Misd\GuzzleBundle\Tests\Fixtures\Person',
-            array('command' => 'UnknownCommand')
+                'Misd\GuzzleBundle\Tests\Fixtures\Person', array('command' => 'UnknownCommand')
         );
         $this->converter->supports($config);
     }
@@ -83,8 +80,7 @@ class GuzzleParamConverterTest extends TestCase
     public function testUnknownCommand()
     {
         $config = $this->createConfiguration(
-            'Misd\GuzzleBundle\Tests\Fixtures\Person',
-            array('client' => 'with.description', 'command' => 'UnknownCommand')
+                'Misd\GuzzleBundle\Tests\Fixtures\Person', array('client' => 'with.description', 'command' => 'UnknownCommand')
         );
         $this->converter->supports($config);
     }
@@ -95,8 +91,7 @@ class GuzzleParamConverterTest extends TestCase
     public function testCommandReturnsWrongClass()
     {
         $config = $this->createConfiguration(
-            __CLASS__,
-            array('client' => 'with.description', 'command' => 'GetPersonClass')
+                __CLASS__, array('client' => 'with.description', 'command' => 'GetPersonClass')
         );
         $this->converter->supports($config);
     }
@@ -120,9 +115,7 @@ class GuzzleParamConverterTest extends TestCase
 
         $request->attributes->set('_route_params', array('real-id' => 2, 'id' => 1));
         $config = $this->createConfiguration(
-            'Misd\GuzzleBundle\Tests\Fixtures\Person',
-            array('mapping' => array('real-id' => 'id'), 'exclude' => array('id')),
-            'arg'
+                'Misd\GuzzleBundle\Tests\Fixtures\Person', array('mapping' => array('real-id' => 'id'), 'exclude' => array('id')), 'arg'
         );
 
         self::$mock->addResponse(self::response200(2));
@@ -184,33 +177,32 @@ class GuzzleParamConverterTest extends TestCase
      */
     protected function createConfiguration($class = null, array $options = null, $name = 'arg', $isOptional = false)
     {
-        $config = $this->getMock(
-            'Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface',
-            array(
-                'getClass',
-                'getAliasName',
-                'getOptions',
-                'getName',
-                'isOptional',
-                'allowArray',
-            )
-        );
+        $config = $this->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter')
+                ->setConstructorArgs(array(array()))
+                ->setMethods(array(
+                    'getClass',
+                    'getAliasName',
+                    'getOptions',
+                    'getName',
+                    'isOptional',
+                    'allowArray',
+                ))->getMock();
         if ($class !== null) {
             $config->expects($this->any())
-                ->method('getClass')
-                ->will($this->returnValue($class));
+                    ->method('getClass')
+                    ->will($this->returnValue($class));
         }
         if ($options !== null) {
             $config->expects($this->any())
-                ->method('getOptions')
-                ->will($this->returnValue($options));
+                    ->method('getOptions')
+                    ->will($this->returnValue($options));
         }
         $config->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue($name));
+                ->method('getName')
+                ->will($this->returnValue($name));
         $config->expects($this->any())
-            ->method('isOptional')
-            ->will($this->returnValue($isOptional));
+                ->method('isOptional')
+                ->will($this->returnValue($isOptional));
 
         return $config;
     }
@@ -218,7 +210,7 @@ class GuzzleParamConverterTest extends TestCase
     protected function response200($id = 1)
     {
         return Response::fromMessage(
-            'HTTP/1.1 200 OK
+                        'HTTP/1.1 200 OK
 Date: Wed, 25 Nov 2009 12:00:00 GMT
 Connection: close
 Server: Test
@@ -242,4 +234,5 @@ Content-Type: application/xml
     {
         return Response::fromMessage('HTTP/1.1 500 Internal Server Error');
     }
+
 }
