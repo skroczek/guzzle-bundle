@@ -15,6 +15,7 @@ use Guzzle\Http\Exception\BadResponseException;
 use Guzzle\Service\ClientInterface;
 use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -45,7 +46,7 @@ class GuzzleParamConverter implements ParamConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function apply(Request $request, ConfigurationInterface $configuration)
+    public function apply(Request $request, ParamConverter $configuration)
     {
         $found = $this->find($configuration);
 
@@ -108,7 +109,7 @@ class GuzzleParamConverter implements ParamConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(ConfigurationInterface $configuration)
+    public function supports(ParamConverter $configuration)
     {
         return null !== $this->find($configuration);
     }
@@ -122,7 +123,7 @@ class GuzzleParamConverter implements ParamConverterInterface
      *
      * @throws LogicException
      */
-    protected function find(ConfigurationInterface $configuration)
+    protected function find(ParamConverter $configuration)
     {
         $options = $configuration->getOptions();
 
